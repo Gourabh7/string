@@ -1,3 +1,17 @@
+The prefix function for this string is defined as an array  pi   of length  
+n, where  
+pi[i]  is the length of the longest proper prefix of the substring  
+s[0 ... i]  which is also a suffix of this substring. A proper prefix of a string is a prefix that is not equal to the string itself. By definition,  
+pi[0] = 0.
+vector<int> prefix_functiontrivial(string s) {
+    int n = (int)s.length();
+    vector<int> pi(n);
+    for (int i = 0; i < n; i++)
+        for (int k = 0; k <= i; k++)
+            if (s.substr(0, k) == s.substr(i-k+1, k))
+                pi[i] = k;
+    return pi;
+}
 vector<int> prefix_function(string s) {
     int n = (int)s.length();
     vector<int> pi(n);
