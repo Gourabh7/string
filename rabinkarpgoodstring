@@ -1,0 +1,77 @@
+//two modulo so that collision frequency reduce 1/1e18
+struct hash_pair {
+    template <class T1, class T2>
+    size_t operator()(const pair<T1, T2>& p) const
+    {
+        auto hash1 = hash<T1>{}(p.first);
+        auto hash2 = hash<T2>{}(p.second);
+ 
+        if (hash1 != hash2) {
+            return hash1 ^ hash2;              
+        }
+         
+        // If hash1 == hash2, their XOR is zero.
+          return hash1;
+    }
+};
+  main()  {
+        string str;
+        cin>>str;
+        string s;
+        cin>>s;
+        map<char,int>bad;
+        for(char ch ='a';ch<='z';ch++){
+            if(s[ch-'a']=='0'){
+                bad[ch]++;
+            }
+        }
+        s=str;
+        int k;
+        cin>>k;
+        int p = 53;
+        int MOD = 1e9 + 7;
+
+        int p2 = 31;
+        int mod = 1e9 + 5;
+        int n = str.size();
+        vector<int> p_pow(n,1);
+        for(int i = 1;i<n;i++){
+          p_pow[i] = (p_pow[i-1]*p)%MOD;
+        }
+        vector<int> p_pow2(n,1);
+
+        for(int i = 1;i<n;i++){
+            p_pow2[i]=(p_pow2[i-1]*p2)%mod;
+        }
+        unordered_set<pair<int,int>, hash_pair> countSet;
+        vector<int> h(n+1,0);
+        vector<int> h2(n+1,0);
+        for(int i =0;i<n;i++){
+            h[i+1] = (h[i]+(str[i]-'a'+1)*p_pow[i])%MOD;
+        }
+        for(int i =0;i<n;i++){
+            h2[i+1] = (h2[i]+(str[i]-'a'+1)*p_pow2[i])%mod;
+        }
+        for(int i =0;i<n;i++){
+             int cnt=0;
+             int hash_value =0;
+            int hash1_value=0;
+            for(int j = i;j<n;j++){
+                if(bad.find(s[j])!=bad.end()){
+                    cnt++;
+                }
+                hash_value = (h[j+1]-h[i]+MOD)%MOD;
+                int p =hash_value*p_pow[n-i-1]%MOD;
+                hash1_value = (h2[j+1]-h2[i]+mod)%mod;
+                int  q = hash1_value*p_pow2[n-i-1]%mod;
+                if(cnt<=k)
+                countSet.insert({q,p});
+
+            }
+        }
+
+        int val = countSet.size();
+        cout<<val<<nl;
+    
+    return 0;
+    }
