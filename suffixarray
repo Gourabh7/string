@@ -74,22 +74,24 @@ vector<int> lcp_construction(string const& s, vector<int> const& p) {
     return lcp;
 }
 
+
+
  main(){
         string s;
         cin>>s;
         
         // vector<int>p;
         vector<int>sa  = suffix_array_construction(s);
-        for(auto it:sa){
-            cout<<it<<" ";
-        }
-        cout<<endl;
+        // for(auto it:sa){
+        //     cout<<it<<" ";
+        // }
+        // cout<<endl;
         // s+='$';
         vector<int>lcp  = lcp_construction(s,sa);
-        for(auto it:lcp){
-            cout<<it<<" ";
-        }
-        cout<<endl;
+        // for(auto it:lcp){
+        //     cout<<it<<" ";
+        // }
+        // cout<<endl;
         int n = s.size();
 
         // vector<int>seg(4*n);
@@ -99,5 +101,21 @@ vector<int> lcp_construction(string const& s, vector<int> const& p) {
         //     ans-=it;
         // }
         // cout<<ans<<endl;
-    
+        int maxi =-1;
+        int maxind = -1;
+        for(int i =1;i<n;i++){
+            if(lcp[i-1]>maxi && lcp[i-1]!=0){
+                maxi = max(maxi,lcp[i-1]);
+                maxind = sa[i];
+            }
+        }
+        if(maxi==-1){
+            cout<< -1<<endl;
+            return 0;
+        }
+        string al  ="";
+        for(int i = maxind;maxi;maxi--,i++){
+            al+=s[i];
+        }
+        cout<<al<<endl;
 }
